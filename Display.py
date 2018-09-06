@@ -12,11 +12,19 @@ class Display(object):
         """
 
         self.scr = scr
-        self.max_y, self.max_x = scr.getmaxyx()
         self.text = text
-        self.maxlen = max([len(l) for l in text])
+        self.maxlen = max([len(l) for l in text]) - 1
         self.num_line = 0 # Number of line to start from
         self.num_char = 0 # Number of char to start from
+        self.helpmsg = "Keys: h, j, k, l, u, d, U, D, g, G. Quit - q"
+        self.coords = str(self.num_line) + ":" + str(self.num_char)
+        self.resize()
+
+
+    def resize(self):
+        self.max_y, self.max_x = self.scr.getmaxyx()
+        if self.max_y < 3 or self.max_x < len(self.coords) + 10:
+            raise RuntimeError('Window is too small')
 
 
     def __draw(self):
@@ -27,13 +35,14 @@ class Display(object):
             else self.num_line + height
         to_draw = self.text[self.num_line : last_line]
         for i, line in enumerate(to_draw):
-            #TODO test for too big num_line
-            end_char = min(len(line) - self.num_char, self.max_x)
+            end_char = min(len(line), self.max_x + self.num_char)
             self.scr.addstr(i, 0, line[self.num_char : end_char])
-        self.scr.addstr(self.max_y - 1, 0,\
-                        "h: left, j: down, k: up, l: right, u: up, d: down")
-        coords = str(self.num_line) + " : " + str(self.num_char)
-        self.scr.addstr(self.max_y - 1, self.max_x - 2 - len(coords), coords)
+        if len(self.helpmsg) + len(self.coords) + 3 < self.max_x:
+            self.scr.addstr(self.max_y - 1, 0, self.helpmsg)
+        else:
+            self.scr.addstr(self.max_y - 1, 0, self.helpmsg[:self.max_x - len(self.coords) - 6] + "...")
+        self.coords = str(self.num_line) + ":" + str(self.num_char)
+        self.scr.addstr(self.max_y - 1, self.max_x - 1 - len(self.coords), self.coords)
 
 
     def __move(self, d: str, step: int):
@@ -46,8 +55,7 @@ class Display(object):
             else:
                 self.num_line = 0
         if d == 'DOWN':
-            if self.num_line + step < len(self.text):
-                #TODO check if I should leave < there or I should use <=
+            if self.num_line + step < len(self.text) - (self.max_y - 2):
                 self.num_line += step
             else:
                 self.num_line = len(self.text) - (self.max_y - 2)
@@ -73,7 +81,7 @@ class Display(object):
         """
 
         if c == curses.KEY_RESIZE:
-            self.max_y, self.max_x = self.scr.getmaxyx()
+            self.resize()
         elif c == ord('h'):
             self.__move('LEFT', 1)
         elif c == ord('j'):
@@ -86,6 +94,14 @@ class Display(object):
             self.__move('UP', self.max_y // 2)
         elif c == ord('d'):
             self.__move('DOWN', self.max_y // 2)
+        elif c == ord('U'):
+            self.__move('UP', self.max_y)
+        elif c == ord('D'):
+            self.__move('DOWN', self.max_y)
+        elif c == ord('g'):
+            self.num_line = 0
+        elif c == ord('G'):
+            self.num_line = len(self.text) - (self.max_y - 2)
         elif c == ord('q'):
             quit()
         else:
@@ -103,7 +119,6 @@ class Display(object):
                 self.__draw()
             c = self.scr.getch()
             redraw = self.key_hooks(c)
-        #TODO Handle screen resize (KEY_RESIZE)
 
 def wrapper(scr, text: list):
     """This function is needed for using curses.wrapper
