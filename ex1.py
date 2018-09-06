@@ -8,11 +8,10 @@ if __name__ == '__main__':
         try:
             with open(sys.argv[1], 'r') as fd:
                 text = [l.strip() for l in fd.readlines()]
-        except FileNotFoundError:
-            print('File not found')
-            quit()
-        try:
-            draw(text)
-        except RuntimeError as e:
-            print(repr(e))
-            quit()
+        except IOError as e:
+            print(e.strerror)
+        else:
+            try:
+                draw(text)
+            except RuntimeError as e:
+                print(e.strerror)
