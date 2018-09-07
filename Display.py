@@ -8,8 +8,7 @@ class Display(object):
         """Initializes class.
         Parameters:
             scr -- standart screen, passed from curses.wrapper()
-            text -- array of strings
-        """
+            text -- array of strings"""
 
         self.scr = scr
         self.text = text
@@ -47,8 +46,10 @@ class Display(object):
 
 
     def __move(self, d: str, step: int):
-        """Changes top line's position
-        """
+        """Changes the starting point
+        Parameters:
+            d -- direction
+            step -- how much to move the starting point"""
 
         if d == 'UP':
             if self.num_line - step >= 0:
@@ -77,8 +78,7 @@ class Display(object):
         Parameters:
             c -- key that was pressed
         Return value:
-            True if redraw is needed else False
-        """
+            True if redraw is needed else False"""
 
         if c == curses.KEY_RESIZE:
             self.resize()
@@ -113,8 +113,7 @@ class Display(object):
 
 
     def run(self):
-        """Infinite loop, that does all the action
-        """
+        """Infinite loop, that does all the action"""
 
         redraw = True
         while True:
@@ -122,6 +121,7 @@ class Display(object):
                 self.__draw()
             c = self.scr.getch()
             redraw = self.key_hooks(c)
+
 
 def wrapper(scr, text: list):
     """This function is needed for using curses.wrapper
@@ -136,7 +136,7 @@ def wrapper(scr, text: list):
 
 
 def draw(text: list):
-    """The draw function. Sets things up and if all is good calls the draw function
+    """The draw function. Wrapper for an easy use of this whole file
     Parameters:
         text -- array of strings
     """
