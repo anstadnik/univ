@@ -2,7 +2,7 @@ import sys
 from Display import draw
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
+    if not len(sys.argv) == 2:
         print('Usage: python3.6 ex1.py PATH')
     else:
         try:
