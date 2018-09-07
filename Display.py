@@ -11,7 +11,8 @@ class Display(object):
             text -- array of strings"""
 
         self.scr = scr
-        self.text = text
+        self.header = text[0]
+        self.text = text[1:]
         self.maxlen = max([len(l) for l in text]) - 1 # The biggest possible value of num_char
         self.num_line = 0 # Number of line to start from
         self.num_char = 0 # Number of char to start from
@@ -29,14 +30,16 @@ class Display(object):
 
     def __draw(self):
         self.scr.clear()
-        height = self.max_y - 2
+        height = self.max_y - 4
         last_line = len(self.text)\
             if len(self.text) - self.num_line < height\
             else self.num_line + height
         to_draw = self.text[self.num_line : last_line]
         for i, line in enumerate(to_draw):
             end_char = min(len(line), self.max_x + self.num_char)
-            self.scr.addstr(i, 0, line[self.num_char : end_char])
+            self.scr.addstr(i + 2, 0, line[self.num_char : end_char])
+        end_char = min(len(self.header), self.max_x + self.num_char)
+        self.scr.addstr(0, 0, self.header[self.num_char:end_char])
         if len(self.helpmsg) + len(self.coords) + 3 < self.max_x:
             self.scr.addstr(self.max_y - 1, 0, self.helpmsg)
         else:
