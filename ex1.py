@@ -39,7 +39,7 @@ def get_text(path: str) -> str:
     try:
         ret = parse_csv(text)
     except RuntimeError as e:
-        print(e.strerror)
+        print(str(e))
         quit(1)
     return ret
 
@@ -52,4 +52,4 @@ if __name__ == '__main__':
     try:
         draw(text)
     except RuntimeError as e:
-        print(e.strerror)
+        print(str(e))
