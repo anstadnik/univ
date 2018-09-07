@@ -13,11 +13,12 @@ class Display(object):
 
         self.scr = scr
         self.text = text
-        self.maxlen = max([len(l) for l in text]) - 1
+        self.maxlen = max([len(l) for l in text]) - 1 # The biggest possible value of num_char
         self.num_line = 0 # Number of line to start from
         self.num_char = 0 # Number of char to start from
-        self.helpmsg = "Keys: h, j, k, l, u, d, U, D, g, G. Quit - q"
+        self.helpmsg = "Keys: h, j, k, l, u, d, U, D, g, G, r. Quit - q"
         self.coords = str(self.num_line) + ":" + str(self.num_char)
+        curses.curs_set(0)
         self.resize()
 
 
@@ -61,7 +62,6 @@ class Display(object):
                 self.num_line = len(self.text) - (self.max_y - 2)
         if d == 'RIGHT':
             if self.num_char + step < self.maxlen:
-                #TODO check if I should leave < there or I should use <=
                 self.num_char += step
             else:
                 self.num_char = self.maxlen
@@ -104,6 +104,9 @@ class Display(object):
             self.num_line = len(self.text) - (self.max_y - 2)
         elif c == ord('q'):
             quit()
+        elif c == ord('r'):
+            self.num_char = 0
+            self.num_line = 0
         else:
             return False
         return True
