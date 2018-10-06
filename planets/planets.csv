@@ -1,0 +1,11 @@
+"name",    "radius", "distance", "flattening", "rotperiod",       "eccentricity", "orbitperiod",
+"Sun",     696342,   0,          0.000009,     25.1,              0,              0,            
+"Mercury", 2440,     57909050,   0,            58.646,            0.20563,        87.9691,      
+"Venus",   6052,     108208000,  0,            -243.0185,         0.0067,         224.701,      
+"Earth",   6378,     149600000,  0.0033528,    0.99726968,        0.01671123,     365.256363004,
+"Mars",    3396,     227939100,  0.00589,      1.025957,          0.0935,         686.971,      
+"Jupiter", 71492,    778547200,  0.06487,      0.41354,           0.048775,       4332.59,      
+"Saturn",  60268,    1433449370, 0.09796,      0.439583333333333, 0.0557,         10759.22,     
+"Uranus",  25559,    2870671400, 0.0229,       0.71833,           0.04722,        30687.15,     
+"Neptune", 24764,    4498542600, 0.0171,       0.6713,            0.008678,       60190.03,     
+# columns are: name of the planet, radius in km, distance (semi-major axis) in km, flattening parameter, rotation period in days, eccentricity parameter, orbital period in days
