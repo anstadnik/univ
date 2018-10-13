@@ -19,7 +19,7 @@ def _percentile(arg: list, n):
     whole = max(0, int(whole - 1))
     return arg[whole] + frac * (arg[whole + 1] - arg[whole])
 
-def mode(arg: list):
+def _mode(arg: list):
     occurs = {}
     maximum = 0
     for item in arg:
@@ -70,7 +70,7 @@ def info(nums: list):
     data["range"] = max(nums) - min(nums)
     data["mean"] = _mean(nums)
     data["median"] = _median(nums)
-    data["mode"] = mode(nums)
+    data["mode"] = _mode(nums)
     data["var"] = _var(nums, ddof = 0)
     data["std"] = _std(nums, ddof = 0)
     data["var_of_sample"] = _var(nums, ddof = 1)
@@ -79,3 +79,4 @@ def info(nums: list):
     for key, value in data.items():
         print(key, "=", value)
     return data
+
