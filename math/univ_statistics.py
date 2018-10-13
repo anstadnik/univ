@@ -1,9 +1,9 @@
 import math
 
-def mean(arg: list):
+def _mean(arg: list):
     return sum(arg)/len(arg)
 
-def median(arg: list):
+def _median(arg: list):
     if len(arg) % 2:
         ind = (len(arg) + 1) // 2
         return arg[ind - 1]
@@ -11,9 +11,9 @@ def median(arg: list):
     return (arg[ind1 - 1] + arg[ind2 - 1]) / 2
 
 # TODO make it work with small lists
-def percentile(arg: list, n):
+def _percentile(arg: list, n):
     if type(n) == list:
-        return [percentile(arg, val) for val in n]
+        return [_percentile(arg, val) for val in n]
     pos = (n / 100) * (len(arg) + 1)
     frac, whole = math.modf(pos)
     whole = max(0, int(whole - 1))
@@ -37,12 +37,12 @@ def mode(arg: list):
             ret.append(key)
     return ret
 
-def var(arg: list, ddof = 0):
-    m = mean(arg)
+def _var(arg: list, ddof = 0):
+    m = _mean(arg)
     return sum([(item - m) ** 2 for item in arg]) / (len(arg) - ddof)
 
-def std(arg: list, ddof = 0):
-    return math.sqrt(var(arg, ddof))
+def _std(arg: list, ddof = 0):
+    return math.sqrt(_var(arg, ddof))
 
 def info(nums: list):
     """Returns useful info for an array
@@ -68,15 +68,14 @@ def info(nums: list):
     data["nums"] = nums
     data["len"] = len(nums)
     data["range"] = max(nums) - min(nums)
-    data["mean"] = mean(nums)
-    data["median"] = median(nums)
+    data["mean"] = _mean(nums)
+    data["median"] = _median(nums)
     data["mode"] = mode(nums)
-    data["var"] = var(nums, ddof = 0)
-    data["std"] = std(nums, ddof = 0)
-    data["var_of_sample"] = var(nums, ddof = 1)
-    data["std_of_sample"] = std(nums, ddof = 1)
-    data["quartiles"] = percentile(nums, [25, 50, 75])
+    data["var"] = _var(nums, ddof = 0)
+    data["std"] = _std(nums, ddof = 0)
+    data["var_of_sample"] = _var(nums, ddof = 1)
+    data["std_of_sample"] = _std(nums, ddof = 1)
+    data["quartiles"] = _percentile(nums, [25, 50, 75])
     for key, value in data.items():
         print(key, "=", value)
     return data
-
