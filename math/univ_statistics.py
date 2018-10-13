@@ -5,9 +5,10 @@ def mean(arg: list):
 
 def median(arg: list):
     if len(arg) % 2:
-        return arg[(len(arg) + 1) // 2 - 1]
-    print((len(arg) // 2) - 1, (len(arg) + 1) // 2 - 1)
-    return (arg[(len(arg) // 2) - 1] + arg[len(arg) // 2 + 1 - 1]) / 2
+        ind = (len(arg) + 1) // 2
+        return arg[ind - 1]
+    ind1, ind2 = (len(arg) // 2), len(arg) // 2 + 1
+    return (arg[ind1 - 1] + arg[ind2 - 1]) / 2
 
 # TODO make it work with small lists
 def percentile(arg: list, n):
