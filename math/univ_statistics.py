@@ -80,3 +80,87 @@ def info(nums: list):
         print(key, "=", value)
     return data
 
+def _cov(x: list, y: list):
+    """Calculates the covariance
+
+    :x: list: TODO
+    :y: list: TODO
+    :returns: TODO
+
+    """
+    mX, mY = _mean(x), _mean(y)
+    assert len(x) == len(y)
+    return (1 / len(x)) * sum([(x_i - mX) * (y_i - mY) for x_i, y_i in zip(x, y)])
+
+def least_squares(x: list, y: list):
+    """Returns parameters for least squares
+
+    :x: list: TODO
+    :y: list: TODO
+    :returns: TODO
+
+    """
+    m = _cov(x, y) / _var(x)
+    k = _mean(y) - m * _mean(x)
+    return m, k
+def _coef_Det(x: list, y: list):
+    """Returns coefficient of determination
+
+    :x: list: TODO
+    :y: list: TODO
+    :returns: TODO
+
+    """
+    m, k = least_squares(x, y)
+    y_ = list(map(lambda x: m * x + k, x))
+    mY = _mean(y)
+    sub_mean = sum([(yi - mY) ** 2 for yi in y])
+    sub_approx = sum([(yi - y_i) ** 2 for yi, y_i in map(y, y_)])
+    return 1 - sub_approx / sub_mean
+# def coef_Exp(x: list, y: list):
+#     """Returns parameters for exponential relationship
+
+#     :x: list: TODO
+#     :y: list: TODO
+#     :returns: TODO
+
+#     """
+
+def _coef_Pearson(x: list, y: list):
+    """Returns Pearson's coefficient
+
+    :x: list: TODO
+    :y: list: TODO
+    :returns: TODO
+
+    """
+    return _cov(x, y) / (_std(x) * _std(y))
+def _coef_Spear(x: list, y: list):
+    """Returns Spearman's coefficiend
+
+    :x: list: TODO
+    :y: list: TODO
+    :returns: TODO
+
+    """
+    sorted_x = sorted(x)
+    rX = [sorted_x.index(v) for v in x]
+    sorted_y = sorted(y)
+    rY = [sorted_y.indey(v) for v in y]
+    return _coef_Pearson(rX, rY)
+def relations(x: list, y: list):
+    """Calculates different kinds of relations and coefficients
+
+    :x:list: TODO
+    :y:list: TODO
+    :returns: TODO
+
+    """
+    data = {}
+    data["cov"] = _cov(x, y)
+    data["lsq"] = least_squares(x, y)
+    data["coefP"] = _coef_Pearson(x, y)
+    # data["coefExp"] = _coef_Exp(x, y)
+    # data["coefPow"] = _coef_Pow(x, y)
+    data["coefDet"] = _coef_Det(x, y)
+    data["coefS"] = _coef_Spear(x, y)
