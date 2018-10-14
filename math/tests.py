@@ -1,4 +1,4 @@
-from univ_statistics import info
+from univ_statistics import info, relations
 import unittest
 import random
 
@@ -69,6 +69,52 @@ class Test_info(unittest.TestCase):
         self.assertAlmostEqual(data["var_of_sample"], 6.67, places = 2)
         self.assertAlmostEqual(data["std_of_sample"], 2.58, places = 2)
 
+class Test_relations(unittest.TestCase):
+
+    """Tests relations function"""
+
+    def test_cov(self):
+        x = [10, 14, 24, 32, 40]
+        y = [8, 24, 36, 42, 48]
+        data = relations(x, y)
+        self.assertAlmostEqual(data["cov"], 150.4)
+
+    def test_lin_rel(self):
+        x = [10, 14, 24, 32, 40]
+        y = [8, 24, 36, 42, 48]
+        data = relations(x, y)
+        self.assertAlmostEqual(data["lsq"][0], 1.22, places = 2)
+        self.assertAlmostEqual(data["lsq"][1], 2.32, places = 2)
+
+    def test_Pearson(self):
+        x = [300, 450, 400, 500, 300, 650, 700, 550]
+        y = [50, 100, 100, 120, 90, 150, 180, 150]
+        data = relations(x, y)
+        self.assertAlmostEqual(data["coefP"], 0.94, places = 2)
+    def test_Det(self):
+        x = list(range(1, 11))
+        y = [3, 5, 6, 7, 6, 14, 13, 12, 17, 40]
+        data = relations(x, y)
+        self.assertAlmostEqual(data["coefDet"], 0.652, places = 3)
+    def test_Spear(self):
+        x = [300, 450, 400, 500, 300, 650, 700, 550]
+        y = [50, 100, 100, 120, 90, 150, 180, 150]
+        data = relations(x, y)
+        self.assertAlmostEqual(data["coefS"], 0.95, places = 3)
+    # def test_exp(self):
+    #     x = list(range(1, 9))
+    #     y = [22, 54, 165, 426, 1195, 3237, 8763, 23857]
+    #     data = relations(x, y)
+    #     self.assertAlmostEqual(data["coefExp"][0], 0.436, places = 3)
+    #     self.assertAlmostEqual(data["coefExp"][1], 0.892, places = 3)
+
+    # def test_pow(self):
+    #     x = [15.7, 18.5, 24.2, 31.6, 35.9, 38.1, 42.3, 45.4, 48.5, 50.9]
+    #     y = [210, 280, 500, 910, 1120, 1320, 1620, 1810, 2130, 1500]
+    #     data = relations(x, y)
+    #     self.assertAlmostEqual(data["coefsPow"][0], )
+    #     self.assertAlmostEqual(data["coefsPow"][1], 0.892)
+
 def suite():
     suites_list = []
     test_classes = [Test_info]
@@ -77,6 +123,7 @@ def suite():
         suites_list.append(loader.loadTestsFromTestCase(test_class))
     big_suite = unittest.TestSuite(suites_list)
     return big_suite
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner()

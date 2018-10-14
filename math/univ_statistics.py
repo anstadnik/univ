@@ -80,19 +80,19 @@ def info(nums: list):
         print(key, "=", value)
     return data
 
-def _cov(x: list, y: list):
+def _cov(x: list, y: list, ddof: int = 0):
     """Calculates the covariance
 
-    :x: list: TODO
-    :y: list: TODO
+    :x:       list: TODO
+    :y:       list: TODO
+    :ddof:    int:  TODO
     :returns: TODO
 
     """
     mX, mY = _mean(x), _mean(y)
-    assert len(x) == len(y)
-    return (1 / len(x)) * sum([(x_i - mX) * (y_i - mY) for x_i, y_i in zip(x, y)])
+    return (1 / (len(x) - ddof)) * sum([(x_i - mX) * (y_i - mY) for x_i, y_i in zip(x, y)])
 
-def least_squares(x: list, y: list):
+def _lin_rel(x: list, y: list, r: int = 7):
     """Returns parameters for least squares
 
     :x: list: TODO
@@ -101,8 +101,33 @@ def least_squares(x: list, y: list):
 
     """
     m = _cov(x, y) / _var(x)
+    m = round(m, r)
     k = _mean(y) - m * _mean(x)
     return m, k
+
+def _exp_rel(x: list, y: list):
+    """Returns params for exponential relation
+
+    :x: list: TODO
+    :y: list: TODO
+    :returns: TODO
+
+    """
+    logY = [math.log10(v) for v in y]
+    return _lin_rel(x, logY)
+
+def _pow_rel(x: list, y: list):
+    """Returns params for power relation
+
+    :x: list: TODO
+    :y: list: TODO
+    :returns: TODO
+
+    """
+    logY = [math.log10(v) for v in y]
+    logX = [math.log10(v) for v in x]
+    return _lin_rel(logX, logY)
+
 def _coef_Det(x: list, y: list):
     """Returns coefficient of determination
 
@@ -111,22 +136,14 @@ def _coef_Det(x: list, y: list):
     :returns: TODO
 
     """
-    m, k = least_squares(x, y)
+    m, k = _lin_rel(x, y)
     y_ = list(map(lambda x: m * x + k, x))
     mY = _mean(y)
     sub_mean = sum([(yi - mY) ** 2 for yi in y])
-    sub_approx = sum([(yi - y_i) ** 2 for yi, y_i in map(y, y_)])
+    sub_approx = sum([(yi - y_i) ** 2 for yi, y_i in zip(y, y_)])
     return 1 - sub_approx / sub_mean
-# def coef_Exp(x: list, y: list):
-#     """Returns parameters for exponential relationship
 
-#     :x: list: TODO
-#     :y: list: TODO
-#     :returns: TODO
-
-#     """
-
-def _coef_Pearson(x: list, y: list):
+def _coef_Pearson(x: list, y: list, ddof: int = 0):
     """Returns Pearson's coefficient
 
     :x: list: TODO
@@ -134,7 +151,8 @@ def _coef_Pearson(x: list, y: list):
     :returns: TODO
 
     """
-    return _cov(x, y) / (_std(x) * _std(y))
+    return _cov(x, y, ddof) / (_std(x) * _std(y))
+
 def _coef_Spear(x: list, y: list):
     """Returns Spearman's coefficiend
 
@@ -146,8 +164,14 @@ def _coef_Spear(x: list, y: list):
     sorted_x = sorted(x)
     rX = [sorted_x.index(v) for v in x]
     sorted_y = sorted(y)
-    rY = [sorted_y.indey(v) for v in y]
-    return _coef_Pearson(rX, rY)
+    rY = [sorted_y.index(v) for v in y]
+    n = len(rY)
+    factor = 12 / (n * (n + 1) * (n -1))
+    m = (n + 1) / 2
+    s = sum([(xi - m) * (yi - m) for xi, yi in zip(rX, rY)])
+    # return _coef_Pearson(rX, rY, 0)
+    return factor * s
+
 def relations(x: list, y: list):
     """Calculates different kinds of relations and coefficients
 
@@ -156,11 +180,13 @@ def relations(x: list, y: list):
     :returns: TODO
 
     """
+    assert len(x) == len(y)
     data = {}
     data["cov"] = _cov(x, y)
-    data["lsq"] = least_squares(x, y)
+    data["lsq"] = _lin_rel(x, y, 2)
     data["coefP"] = _coef_Pearson(x, y)
-    # data["coefExp"] = _coef_Exp(x, y)
-    # data["coefPow"] = _coef_Pow(x, y)
+    data["coefExp"] = _exp_rel(x, y)
+    data["coefPow"] = _pow_rel(x, y)
     data["coefDet"] = _coef_Det(x, y)
     data["coefS"] = _coef_Spear(x, y)
+    return data
