@@ -161,16 +161,9 @@ def _coef_Spear(x: list, y: list):
     :returns: TODO
 
     """
-    sorted_x = sorted(x)
-    rX = [sorted_x.index(v) for v in x]
-    sorted_y = sorted(y)
-    rY = [sorted_y.index(v) for v in y]
-    n = len(rY)
-    factor = 12 / (n * (n + 1) * (n -1))
-    m = (n + 1) / 2
-    s = sum([(xi - m) * (yi - m) for xi, yi in zip(rX, rY)])
-    # return _coef_Pearson(rX, rY, 0)
-    return factor * s
+    rX = list(map(lambda a: a[0] + 1, sorted(enumerate(sorted(enumerate(x), key=lambda a: a[1])), key=lambda a: a[1][0])))
+    rY = list(map(lambda a: a[0] + 1, sorted(enumerate(sorted(enumerate(y), key=lambda a: a[1])), key=lambda a: a[1][0])))
+    return _coef_Pearson(rX, rY)
 
 def relations(x: list, y: list):
     """Calculates different kinds of relations and coefficients
@@ -190,3 +183,12 @@ def relations(x: list, y: list):
     data["coefDet"] = _coef_Det(x, y)
     data["coefS"] = _coef_Spear(x, y)
     return data
+def estimate(data: dict, x):
+    """Returns estimated y for given x and data
+
+    :data: dict: TODO
+    :x: TODO
+    :returns: TODO
+
+    """
+    return data["lsq"][0] * x + data["lsq"][1]

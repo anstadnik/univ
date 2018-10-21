@@ -100,7 +100,7 @@ class Test_relations(unittest.TestCase):
         x = [300, 450, 400, 500, 300, 650, 700, 550]
         y = [50, 100, 100, 120, 90, 150, 180, 150]
         data = relations(x, y)
-        self.assertAlmostEqual(data["coefS"], 0.95, places = 3)
+        self.assertAlmostEqual(data["coefS"], 0.95, places = 2)
     # def test_exp(self):
     #     x = list(range(1, 9))
     #     y = [22, 54, 165, 426, 1195, 3237, 8763, 23857]
