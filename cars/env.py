@@ -8,8 +8,8 @@ class Env(object):
     def __init__(self, screen: pg.Surface):
         self.cars = pg.sprite.Group()
         self.tmp = len(self.cars)
-        self.size_car = (10, 20)
-        self.max_cars = 20
+        self.size_car = (50, 50)
+        self.max_cars = 50
         self.screen = screen
         self.width, self.height = self.screen.get_size()
         self.start = 0
@@ -18,13 +18,17 @@ class Env(object):
         self.starts[1].rect = pg.rect.Rect((self.width - 30, 10), (10, 10))
         self.starts[2].rect = pg.rect.Rect((10, self.height - 30), (10, 10))
         self.starts[3].rect = pg.rect.Rect((self.width - 30, self.height - 30), (10, 10))
+        self.starts[0].cooldown = 0
+        self.starts[1].cooldown = 0
+        self.starts[2].cooldown = 0
+        self.starts[3].cooldown = 0
 
     def get_dir(self, start: int):
         """Returns dir for specific position
 
         :start: int: TODO
         :returns: TODO"""
-        r1, r2 = random.random() + 1e-7, random.random() + 1e-7
+        r1, r2 = random.random() + 1e-3, random.random() + 1e-3
         if start == 0:
             return (r1, r2)
         elif start == 1:
@@ -46,7 +50,13 @@ class Env(object):
         if len(self.cars) < self.max_cars:
             tmp = None
             i = 0
-            while pg.sprite.spritecollideany(self.starts[self.start], self.cars):
+            for s in self.starts:
+                if not s.cooldown == 0:
+                    if s.cooldown < 70:
+                        s.cooldown += 1
+                    else:
+                        s.cooldown = 0
+            while pg.sprite.spritecollideany(self.starts[self.start], self.cars) or self.starts[self.start].cooldown:
                 if tmp:
                     if tmp == self.start:
                         return
@@ -55,6 +65,7 @@ class Env(object):
                 i += 1
                 self.start = (self.start + 1) % 4
             start = self.starts[self.start]
+            self.starts[self.start].cooldown = 1
             self.cars.add(Car(start.rect.topleft, self.get_dir(self.start), self.size_car))
 
     def update(self):
@@ -63,8 +74,8 @@ class Env(object):
         :returns: TODO
         """
         self._manage_cars()
-        self.cars.update()
-        text_to_screen(self.screen, len(self.cars), 10, 10)
+        self.cars.update(self.cars)
+        text_to_screen(self.screen, "Cars: " + str(len(self.cars)), 200, 10)
         # calculate intersections for cars
         # update cars
 
