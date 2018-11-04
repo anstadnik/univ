@@ -183,6 +183,7 @@ def relations(x: list, y: list):
     data["coefDet"] = _coef_Det(x, y)
     data["coefS"] = _coef_Spear(x, y)
     return data
+
 def estimate(data: dict, x):
     """Returns estimated y for given x and data
 
@@ -192,3 +193,37 @@ def estimate(data: dict, x):
 
     """
     return data["lsq"][0] * x + data["lsq"][1]
+
+def fact(n: int):
+    """Returns factorial for a number
+
+    :n: int: TODO
+    :returns: TODO
+
+    """
+    if n < 2:
+        return 1
+    s = 1
+    for i in range(1, n + 1):
+        s *= i
+    return s
+
+def perm(r: int, n: int):
+    """Returns permutations for r objs from n objs
+
+    :n: int: TODO
+    :r: int: TODO
+    :returns: TODO
+
+    """
+    return fact(n) / fact(n - r)
+
+def comb(r: int, n: int):
+    """Returns combinations for r objs from n objs
+
+    :r: int: TODO
+    :n: int: TODO
+    :returns: TODO
+
+    """
+    return fact(n) / (fact(r) * fact(n - r))
