@@ -2,7 +2,6 @@
 import datetime
 import argparse
 import sys
-# import matplotlib
 import matplotlib.pyplot as plt
 import os
 import pandas as pd
@@ -80,12 +79,8 @@ class Visualizer(object):
                 days, hours = 2, 0
             elif self.time == 'month':
                 days, hours = 365/12, 0
-            # print(datetime.timedelta(days))
-            filt = lambda df: (now - conv(df['date.utc'])) < datetime.timedelta(days)
-            # for index, row in self.df.iterrows():
-            #     # print(now - conv(row['date.utc']))
-            #     print(conv(row['date.utc']))
-            # self.df = self.df[now - conv(self.df['date.utc']) < datetime.timedelta(days).isoformat()]
+            self.df['time'] = self.df['date.utc'].apply(conv)
+            filt = lambda df: (now - df['time']) < datetime.timedelta(days)
             self.df = self.df[self.df.apply(filt, axis = 1)]
 
     def _draw(self):
@@ -93,14 +88,9 @@ class Visualizer(object):
         :returns: TODO
 
         """
-        # pass
-        # print(self.df)
         fig, ax = plt.subplots()
         for key, grp in self.df.groupby(['parameter']):
-            ax = grp.plot(ax=ax, kind='line', y='value', x='date.utc', label=key)
-
-        # for parameter in self.df['parameter'].unique():
-        #     self.df[self.df['parameter'] == parameter].plot(y='value', x='date.utc')
+            ax = grp.plot(ax=ax, kind='line', y='value', x='time', label=key)
         plt.show()
 
     def process(self):

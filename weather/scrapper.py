@@ -10,20 +10,25 @@ class Scrapper(object):
     """Updates data
     """
 
-    def __init__(self, url, filename, interval, verbose, limit):
+    def __init__(self, url, filename, interval, verbose, limit, pages):
         self.url = url + "?limit=" + str(limit)
-        print(self.url)
         self.filename = filename
         self.interval = interval
         self.verbose = verbose
         self.counter = 0
+        self.pages = pages
 
     def _get_data(self):
         """Loads data from internet
         :returns: TODO
 
         """
-        response = json.loads(requests.get(self.url).text)
+        rez = pd.DataFrame()
+        for p in range(1, self.pages + 1):
+            url = self.url + '&page=' + str(p)
+            response = json.loads(requests.get(url).text)
+            # print(url)
+            rez.append(response, ignore_index=True)
         return pd.io.json.json_normalize(response['results'])
 
     def _get_local_data(self):
@@ -90,9 +95,10 @@ def main():
     parser.add_argument("-i", "--interval", type=int, default=10, help="Interval between updates of data in seconds")
     parser.add_argument("-v", "--verbose", action='store_true', help="Set to True to enable verbosity")
     parser.add_argument("-l", "--limit", type=int, default=100, help="Number of values to load in one update")
+    parser.add_argument("-p", "--pages", type=int, default=1, help="Number of pages to load in one update")
     parser.add_argument('--version', action='version', version='%(prog)s 1.0')
     args = parser.parse_args()
-    scrapper = Scrapper(args.url, args.filename, args.interval, args.verbose, args.limit)
+    scrapper = Scrapper(args.url, args.filename, args.interval, args.verbose, args.limit, args.pages)
     scrapper.loop()
 
 def wrapper(fun):
