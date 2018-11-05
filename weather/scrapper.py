@@ -10,8 +10,9 @@ class Scrapper(object):
     """Updates data
     """
 
-    def __init__(self, url, filename, interval, verbose):
-        self.url = url
+    def __init__(self, url, filename, interval, verbose, limit):
+        self.url = url + "?limit=" + str(limit)
+        print(self.url)
         self.filename = filename
         self.interval = interval
         self.verbose = verbose
@@ -88,8 +89,10 @@ def main():
     parser.add_argument("-f", "--filename", default="data.json", help="Name of file where local changes are")
     parser.add_argument("-i", "--interval", type=int, default=10, help="Interval between updates of data in seconds")
     parser.add_argument("-v", "--verbose", action='store_true', help="Set to True to enable verbosity")
+    parser.add_argument("-l", "--limit", type=int, default=100, help="Number of values to load in one update")
+    parser.add_argument('--version', action='version', version='%(prog)s 1.0')
     args = parser.parse_args()
-    scrapper = Scrapper(args.url, args.filename, args.interval, args.verbose)
+    scrapper = Scrapper(args.url, args.filename, args.interval, args.verbose, args.limit)
     scrapper.loop()
 
 def wrapper(fun):
