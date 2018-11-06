@@ -62,6 +62,9 @@ class Visualizer(object):
         :returns: TODO
 
         """
+        conv = lambda t: datetime.datetime.strptime(t, '%Y-%m-%dT%H:%M:%S.%fZ')
+        now = datetime.datetime.utcnow()
+        self.df['time'] = self.df['date.utc'].apply(conv)
         if self.city:
             self.df = self.df[self.df['city'] == self.city]
         if self.country:
@@ -69,8 +72,6 @@ class Visualizer(object):
         if self.parameter:
             self.df = self.df[self.df['parameter'] == self.parameter]
         if self.time:
-            conv = lambda t: datetime.datetime.strptime(t, '%Y-%m-%dT%H:%M:%S.%fZ')
-            now = datetime.datetime.utcnow()
             if self.time == 'hour':
                 days, hours = 0, 1
             elif self.time == 'day':
@@ -79,7 +80,6 @@ class Visualizer(object):
                 days, hours = 2, 0
             elif self.time == 'month':
                 days, hours = 365/12, 0
-            self.df['time'] = self.df['date.utc'].apply(conv)
             filt = lambda df: (now - df['time']) < datetime.timedelta(days)
             self.df = self.df[self.df.apply(filt, axis = 1)]
 
