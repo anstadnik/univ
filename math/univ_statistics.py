@@ -76,8 +76,8 @@ def info(nums: list):
     data["var_of_sample"] = _var(nums, ddof = 1)
     data["std_of_sample"] = _std(nums, ddof = 1)
     data["quartiles"] = _percentile(nums, [25, 50, 75])
-    for key, value in data.items():
-        print(key, "=", value)
+    # for key, value in data.items():
+    #     print(key, "=", value)
     return data
 
 def _cov(x: list, y: list, ddof: int = 0):
@@ -175,12 +175,12 @@ def relations(x: list, y: list):
     """
     assert len(x) == len(y)
     data = {}
-    data["cov"] = _cov(x, y)
+    # data["cov"] = _cov(x, y)
     data["lsq"] = _lin_rel(x, y, 2)
-    data["coefP"] = _coef_Pearson(x, y)
-    data["coefExp"] = _exp_rel(x, y)
-    data["coefPow"] = _pow_rel(x, y)
-    data["coefDet"] = _coef_Det(x, y)
+    # data["coefP"] = _coef_Pearson(x, y)
+    # data["coefExp"] = _exp_rel(x, y)
+    # data["coefPow"] = _pow_rel(x, y)
+    # data["coefDet"] = _coef_Det(x, y)
     data["coefS"] = _coef_Spear(x, y)
     return data
 
