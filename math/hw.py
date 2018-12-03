@@ -1,7 +1,6 @@
 from univ_statistics import info, relations
 from data import dir_met, indir_met
 from sklearn import linear_model
-
 import matplotlib.pyplot as plt
 
 dir_keys = ["LOC", "NOM", "NOP", "HDD", "HIT"]
@@ -98,7 +97,7 @@ def display_correlation():
     plt.close()
 
 
-def display_regression():
+def display_single_regression():
     keys = [
         ["LOC", "NOM"],
         ["LOC", "HIT"],
@@ -109,23 +108,55 @@ def display_regression():
     met = {**dir_met, **indir_met}
     fig_dir, ax = plt.subplots(3, 2, figsize=(10, 10))
     fig_dir.canvas.set_window_title("Spearman correlation")
+
     for i, k in enumerate(keys):
         key1, key2 = k
         vals1 = met[key1]
-        stat1 = info(vals1)
-        vals1 = [(val - stat1["mean"]) / stat1["std"] for val in vals1]
         vals2 = met[key2]
+        stat1 = info(vals1)
         stat2 = info(vals1)
+        vals1 = [(val - stat1["mean"]) / stat1["std"] for val in vals1]
         vals2 = [(val - stat2["mean"]) / stat2["std"] for val in vals2]
+        # Scatter
         ax[i % 3][i // 3].scatter(range(len(vals1)), vals1, label=key1)
         ax[i % 3][i // 3].scatter(range(len(vals2)), vals2, label=key2)
+
+        # Linear regression
+        # m1, k1 = relations(vals1, range(len(vals1)))["lsq"]
+        # m2, k2 = relations(vals2, range(len(vals2)))["lsq"]
+        # ax[i % 3][i // 3].plot([m1 * x + k1 for x in range(2)], range(2),
+        # label="Linear regression for " + key1)
+        # ax[i % 3][i // 3].plot([m2 * x + k2 for x in range(2)], range(2),
+        # label="Linear regression for " + key2)
+        lin_regr1 = linear_model.LinearRegression()
+        lin_regr1.fit([[x] for x in range(len(vals1))], vals1)
+        lin_pred1 = lin_regr1.predict([[x] for x in range(len(vals1))])
+        lin_regr2 = linear_model.LinearRegression()
+        lin_regr2.fit([[x] for x in range(len(vals2))], vals2)
+        lin_pred2 = lin_regr2.predict([[x] for x in range(len(vals2))])
+        ax[i % 3][i // 3].plot(range(len(vals1)), lin_pred1, label="Linear"
+                               "regression for " + key1)
+        ax[i % 3][i // 3].plot(range(len(vals2)), lin_pred2, label="Linear"
+                               "regression for " + key2)
+
+        # Polynomial regression
+        features = [[x, x ** 2, x ** 3] for x in range(len(vals1))]
+        regr1 = linear_model.LinearRegression()
+        regr1.fit(features, vals1)
+        pred1 = [regr1.predict([[x, x ** 2, x ** 3]]) for x in
+                 range(len(vals1))]
+        regr2 = linear_model.LinearRegression()
+        regr2.fit(features, vals2)
+        pred2 = [regr2.predict([[x, x ** 2, x ** 3]]) for x in
+                 range(len(vals2))]
+        ax[i % 3][i // 3].plot(range(len(vals1)), pred1, label="Polynomial"
+                               "regression for " + key1)
+        ax[i % 3][i // 3].plot(range(len(vals2)), pred2, label="Polynomial"
+                               "regression for " + key2)
+        ax[i % 3][i // 3].set_xlabel("Index")
+        ax[i % 3][i // 3].set_ylabel(key1 + ", " + key2)
         ax[i % 3][i // 3].legend()
-        m1, k1 = relations(vals1, range(len(vals1)))["lsq"]
-        m2, k2 = relations(vals2, range(len(vals2)))["lsq"]
-        ax[i % 3][i // 3].plot([m1 * x + k1 for x in range(-1, 3)], range(-1,
-                                                                          3))
-        ax[i % 3][i // 3].plot([m2 * x + k2 for x in range(-1, 3)], range(-1,
-                                                                          3))
+
     plt.tight_layout()
     fig_dir.show()
     plt.waitforbuttonpress()
@@ -134,10 +165,10 @@ def display_regression():
 
 def part2():
     display_correlation()
-    display_regression()
+    display_single_regression()
 
 
-def part3():
+def display_regression():
     """Trying to make more features
     :returns: TODO
 
@@ -160,27 +191,24 @@ def part3():
         vals2 = met[key2]
         stat2 = info(vals1)
         vals2 = [(val - stat2["mean"]) / stat2["std"] for val in vals2]
-        ax[i % 3][i // 3].scatter(range(len(vals1)), vals1, label=key1)
-        ax[i % 3][i // 3].scatter(range(len(vals2)), vals2, label=key2)
-        ax[i % 3][i // 3].legend()
-        features = [[x, x ** 2, x ** 3] for x in range(len(vals1))]
+        ax[i % 3][i // 3].scatter(vals1, vals2)
+        ax[i % 3][i // 3].set_xlabel(key1)
+        ax[i % 3][i // 3].set_ylabel(key2)
+        # ax[i % 3][i // 3].legend()
+        features = [[x, x ** 2, x ** 3] for x in vals1]
         regr1 = linear_model.LinearRegression()
-        regr1.fit(features, vals1)
-        pred1 = [regr1.predict([[x, x ** 2, x ** 3]]) for x in
-                 range(len(vals1))]
-        regr2 = linear_model.LinearRegression()
-        regr2.fit(features, vals2)
-        pred2 = [regr2.predict([[x, x ** 2, x ** 3]]) for x in
-                 range(len(vals2))]
-        m1, k1 = relations(vals1, range(len(vals1)))["lsq"]
-        m2, k2 = relations(vals2, range(len(vals2)))["lsq"]
-        ax[i % 3][i // 3].plot(range(len(vals1)), pred1)
-        ax[i % 3][i // 3].plot(range(len(vals2)), pred2)
+        regr1.fit(features, vals2)
+        pred1 = regr1.predict(features)
+        ax[i % 3][i // 3].plot(vals1, pred1)
 
     plt.tight_layout()
     fig_dir.show()
     plt.waitforbuttonpress()
     plt.close()
+
+
+def part3():
+    display_regression()
 
 
 def main():
