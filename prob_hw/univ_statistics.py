@@ -76,8 +76,8 @@ def info(nums: list):
     data["var_of_sample"] = _var(nums, ddof = 1)
     data["std_of_sample"] = _std(nums, ddof = 1)
     data["quartiles"] = _percentile(nums, [25, 50, 75])
-    for key, value in data.items():
-        print(key, "=", value)
+    # for key, value in data.items():
+    #     print(key, "=", value)
     return data
 
 def _cov(x: list, y: list, ddof: int = 0):
@@ -175,14 +175,15 @@ def relations(x: list, y: list):
     """
     assert len(x) == len(y)
     data = {}
-    data["cov"] = _cov(x, y)
+    # data["cov"] = _cov(x, y)
     data["lsq"] = _lin_rel(x, y, 2)
-    data["coefP"] = _coef_Pearson(x, y)
-    data["coefExp"] = _exp_rel(x, y)
-    data["coefPow"] = _pow_rel(x, y)
-    data["coefDet"] = _coef_Det(x, y)
+    # data["coefP"] = _coef_Pearson(x, y)
+    # data["coefExp"] = _exp_rel(x, y)
+    # data["coefPow"] = _pow_rel(x, y)
+    # data["coefDet"] = _coef_Det(x, y)
     data["coefS"] = _coef_Spear(x, y)
     return data
+
 def estimate(data: dict, x):
     """Returns estimated y for given x and data
 
@@ -192,3 +193,37 @@ def estimate(data: dict, x):
 
     """
     return data["lsq"][0] * x + data["lsq"][1]
+
+def fact(n: int):
+    """Returns factorial for a number
+
+    :n: int: TODO
+    :returns: TODO
+
+    """
+    if n < 2:
+        return 1
+    s = 1
+    for i in range(1, n + 1):
+        s *= i
+    return s
+
+def perm(r: int, n: int):
+    """Returns permutations for r objs from n objs
+
+    :n: int: TODO
+    :r: int: TODO
+    :returns: TODO
+
+    """
+    return fact(n) / fact(n - r)
+
+def comb(r: int, n: int):
+    """Returns combinations for r objs from n objs
+
+    :r: int: TODO
+    :n: int: TODO
+    :returns: TODO
+
+    """
+    return fact(n) / (fact(r) * fact(n - r))

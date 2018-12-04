@@ -1,4 +1,4 @@
-from univ_statistics import info, relations
+from univ_statistics import info, relations, fact, perm, comb
 import unittest
 import random
 
@@ -114,6 +114,43 @@ class Test_relations(unittest.TestCase):
     #     data = relations(x, y)
     #     self.assertAlmostEqual(data["coefsPow"][0], )
     #     self.assertAlmostEqual(data["coefsPow"][1], 0.892)
+
+class Test_combinatorics(unittest.TestCase):
+
+    """Tests combinatorics functions"""
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_fact0(self):
+        self.assertEqual(1, fact(0))
+
+    def test_fact1(self):
+        self.assertEqual(1, fact(1))
+
+    def test_fact2(self):
+        self.assertEqual(5040, fact(7))
+
+    def test_perm0(self):
+        self.assertEqual(2184, perm(3, 14))
+
+    def test_comb0(self):
+        self.assertEqual(1, comb(0, 7))
+
+    def test_comb1(self):
+        self.assertEqual(7, comb(1, 7))
+
+    def test_comb2(self):
+        self.assertEqual(1, comb(7, 7))
+
+    def test_comb3(self):
+        self.assertEqual(15504, comb(5, 20))
+
+    def test_comb4(self):
+        self.assertEqual(364, comb(3, 14))
 
 def suite():
     suites_list = []
