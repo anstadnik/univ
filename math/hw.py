@@ -107,14 +107,14 @@ def display_single_regression():
     ]
     met = {**dir_met, **indir_met}
     fig_dir, ax = plt.subplots(3, 2, figsize=(10, 10))
-    fig_dir.canvas.set_window_title("Spearman correlation")
+    fig_dir.canvas.set_window_title("Trying regressions on data")
 
     for i, k in enumerate(keys):
         key1, key2 = k
         vals1 = met[key1]
         vals2 = met[key2]
         stat1 = info(vals1)
-        stat2 = info(vals1)
+        stat2 = info(vals2)
         vals1 = [(val - stat1["mean"]) / stat1["std"] for val in vals1]
         vals2 = [(val - stat2["mean"]) / stat2["std"] for val in vals2]
         # Scatter
@@ -182,14 +182,14 @@ def display_regression():
     ]
     met = {**dir_met, **indir_met}
     fig_dir, ax = plt.subplots(3, 2, figsize=(10, 10))
-    fig_dir.canvas.set_window_title("Spearman correlation")
+    fig_dir.canvas.set_window_title("Regressions between metrics")
     for i, k in enumerate(keys):
         key1, key2 = k
         vals1 = met[key1]
         stat1 = info(vals1)
         vals1 = [(val - stat1["mean"]) / stat1["std"] for val in vals1]
         vals2 = met[key2]
-        stat2 = info(vals1)
+        stat2 = info(vals2)
         vals2 = [(val - stat2["mean"]) / stat2["std"] for val in vals2]
         ax[i % 3][i // 3].scatter(vals1, vals2)
         ax[i % 3][i // 3].set_xlabel(key1)
