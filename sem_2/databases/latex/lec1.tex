@@ -1,0 +1,49 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb}
+\title{Relational algebra}
+\author{Andrii Stadnik}
+
+\begin{document}
+	\maketitle
+	\tableofcontents
+	\section{Lecture 1}
+	\subsection{Intro}
+
+	The hardest - to normalize. There are a lot of normal forms: 6. DB has to
+	satisfy them. High forms are not used (5, 6). The main idea: we have a big
+	table, and then we split them into the smallest ones. But the problem is
+	that you have to connect them, which is hard. 
+
+	There is relational algebra first, and then based on it relational DBs were
+	created.
+
+	The main thing in relational algebra is \emph{relations}.
+
+	\subsection{Sets}
+
+	What we will define first is \emph{nominative sets}. Those are like
+	dictionaries in programming languages. 
+	Definitions:
+	\begin{itemize}
+		\item It's a finite set of pairs ${(n_1, v_1), \ldots, (n_k, v_k)}$,
+			where $n_i \in N, v_i \in V, n_i \neq n_j$, if $i \neq j$, $i, j =
+			1..k $.
+		\item It's a finite mapping from space N to the space V.
+	\end{itemize}
+	We will write it as $\{n_1: v_1, \ldots, n_k, v_k\}$.
+	Example: $\{last_name:'Smith', birthday:3.9.1990\}$
+	\subsection{Tuples}
+	Let's define some things:
+	\begin{description}
+		\item[A] Set of attributes' names. $a_1$
+		\item[Dom] Set of the atomic data
+		\item[Schema S] Finite set of attributes' names $a_1, a_2, \ldots, $
+	\end{description}
+
+
+\end{document}
