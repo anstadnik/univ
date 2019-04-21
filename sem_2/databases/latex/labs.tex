@@ -1,0 +1,76 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb}
+\title{Databases labs}
+\author{Andrii Stadnik}
+
+\begin{document}
+	\maketitle
+	\tableofcontents
+	\section{Lab 1}
+	\subsection{}
+	\begin{align*}
+		S &= \{name, salary, city\} \\
+		r &= \begin{aligned}[t]
+			&\{(Andrii, 2500, Kyiv), \\
+			&(Jonathan, 1200, San-Diego), \\
+			&(Potato, 4500, Potato-city)\} \\
+			\end{aligned} \\
+		EMP &= (S, r)
+	.\end{align*}
+	\subsection{}
+	\[
+	*_{city}(EMP_1) = Kyiv
+	.\]
+	\subsection{}
+	\[
+		EMP_1 \overline{\cup} EMP_1 = EMP_1
+	.\]
+	\subsection{}
+	\[
+		a \implies (R(S, r)) = R(\{a \implies \hat{S}, \forall \hat{S} \in S\}, (a \implies
+		\hat{r}, \forall \hat{r} \in r))
+	.\]
+	\section{Lab 2}
+	\subsection{}
+	\begin{align}
+		&\begin{aligned}
+			FILTER(S^2(<>, *_{a}, *_{b})) &\big((a, b), \{(a: 1, b: 2), (a: 3,
+			b: 3)\}\big) \\
+										  &= \big( (a, b), \{(a: 1, b: 2)\} \big)
+		\end{aligned} \\
+		&\begin{aligned}
+			S^{2}(SEL(a = *_{a}), FILTER(S^{2}(<, *_{b}, *_{c}))) &\big((a, b,
+			c), \{(a: b, b: 3, c: 2)\}\big) \\
+																	 &= \big((a, b),
+																		 \{(a:
+																		 3)\}) \\
+		\end{aligned} \\
+		&\begin{aligned}
+			S^1(FILTER(S^2(<, *_{b}, *_{c})), *_{t}) &\Big((t), {(t: \big((a, b),
+			\{(a: 1, b: 2), (a: 3, b: 3)\}\big))}\Big) \\
+													 &= \big((a, b), \{(a: 1, b: 2)\}\big)
+		\end{aligned} \\
+	.\end{align}
+	\subsection{}
+	\begin{itemize}
+		\item SELECT * FROM t WHERE t.b < t.c;
+		\item SELECT x.*, y.* FROM t1 x CROSS JOIN t2 y;
+		\item SELECT x.c - 11 AS a, y.d AS b FROM t1 x CROSS JOIN t2 y;
+	\end{itemize}
+	\subsection{}
+	\begin{itemize}
+		\item FILTER(=, *a, 5)( $t_1$ )
+		\item SEL($a_1$ = *a, $b_1$ = *b + 7)($t_1$)
+		\item \begin{aligned}
+				$S^1$ (SEL($a_1$ = *$t_1$.a, $b_1$ = *$t_1$.b, $x_1$ = $t_2$.x),
+				&\\
+				$S^2$ (FILTER($S^2$(=, *$t_1$.a, *$t_2$.a), & \\
+				$S^1$ ($CJ_{t_1, t_2}$, $*_{t_1}$, $*_{t_2}$ ))))
+			\end{aligned}
+	\end{itemize}
+\end{document}
