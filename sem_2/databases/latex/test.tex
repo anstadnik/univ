@@ -1,0 +1,49 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb, graphicx}
+\graphicspath{ {images/} }
+\title{My first document}
+\author{Andrii Stadnik}
+
+\begin{document}
+	\maketitle
+	\tableofcontents
+	\section{Testing}
+	This is the simple text
+
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{day}
+		\caption{day}
+		\label{fig:day}
+	\end{figure}
+
+	Omg it works \emph{I mean \ref{fig:day}}
+	
+	Example of the list:
+
+	\begin{itemize}
+		\item hm
+		\item hmhm
+	\end{itemize}
+
+	\begin{enumerate}
+		\item hm
+		\item is it an ordered list?
+	\end{enumerate}
+
+	\section{Math}
+
+	magic $\frac{1}{15}$
+	Einstein $E=m^2$
+	\[
+		\int_{\infty}^{\infty} hm 
+	.\] 
+
+
+	% This is the comment
+\end{document}
