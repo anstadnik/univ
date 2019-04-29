@@ -1,0 +1,4 @@
+ABCDE
+A->B
+BC->E
+ED->A

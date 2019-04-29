@@ -1,7 +1,0 @@
-S = (name, city, age)
-
-r = {(Andrii, Kyiv, 20),
-(Dima, Lviv, 19),
-(Koko, Toronto, 21)}
-
-EMP = (S, r) // 1
