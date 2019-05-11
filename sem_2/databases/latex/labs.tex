@@ -266,12 +266,12 @@ We can remove the last one:
     \item $C \subset AC \implies AC \to C$, which means that we can derive the 5th equation, and so we can remove it
 \end{itemize}
 \subsection{}
-% Key is $BC$. If we divide the relation into 3 relations:  $BC$, $CD$ and $CA$, this schema will be in 3NF.
-Key is $BC$. It's already in the 3rd form, and even though it's not in BCNF, it's not required to be.
+% Key is $B$. If we divide the relation into 3 relations:  $BC$, $CD$ and $CA$, this schema will be in 3NF.
+Key is $B$. It has the transitive dependencies $C \to D$ and $C \to A$, so we have to divide the relation into 2: $BC$ and $CDA$.
 \subsection{}
 Key is $A$. If we divide the relation into 2 relations: $ACB$ and $BCD$, it will be in the 3NF.% If we add one more relation $ACB$, it will be in the 3NF. Though we could split it only in 2 relations: $ACB$ and $BCD$, and all functional dependencies will hold.
 \subsection{}
-Key is AB. This one is already in 3NF, though it's not in the BCNF.
+Key is $A$. We can prove that $A \to C$: since $A \to DE$, $A \to D$, and since $A \to D$ and $D \to B$, $A \to B$ (transitivity). And since $AB \to C$ and $A \to B$, $A \to C$. We have to divide it into $ADEC$ and $DB$.
 \end{document}
 
 vim:set et sw=4 ts=4 tw=0:
