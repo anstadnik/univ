@@ -4,7 +4,8 @@
 \usepackage[T1]{fontenc}
 \usepackage{textcomp}
 \usepackage[english]{babel}
-\usepackage{amsmath, amssymb, caption, titlesec, fullpage, multicol, bm}
+\usepackage{amsmath, amssymb, caption, titlesec, fullpage, multicol, bm, graphicx}
+\graphicspath{ {images/} }
 \captionsetup{labelformat=empty,labelsep=none}
 \newcommand{\sectionbreak}{\clearpage}
 \title{Databases labs}
@@ -272,6 +273,27 @@ Key is $B$. It has the transitive dependencies $C \to D$ and $C \to A$, so we ha
 Key is $A$. If we divide the relation into 2 relations: $ACB$ and $BCD$, it will be in the 3NF.% If we add one more relation $ACB$, it will be in the 3NF. Though we could split it only in 2 relations: $ACB$ and $BCD$, and all functional dependencies will hold.
 \subsection{}
 Key is $A$. We can prove that $A \to C$: since $A \to DE$, $A \to D$, and since $A \to D$ and $D \to B$, $A \to B$ (transitivity). And since $AB \to C$ and $A \to B$, $A \to C$. We have to divide it into $ADEC$ and $DB$.
+\section{Lab 7}
+\subsection{}
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.6\textwidth]{er_diagram}
+    \caption{er\_diagram}
+    \label{fig:er_diagram}
+\end{figure}
+\clearpage
+On this image we can clearly see all connections. There are a couple types of connections
+\begin{itemize}
+    \item One to many:
+        \includegraphics[width=0.3\textwidth]{one_to_many}
+    \item One to one:
+        \includegraphics[width=0.3\textwidth]{one_to_one}
+    \item Connection to itself:
+        \includegraphics[width=0.3\textwidth]{connection_to_itself}
+\end{itemize}
+Also there are a couple of weak entities (an entity is called weak if it's primary
+key is a superset of the primary key of the related entity):
+\includegraphics[width=0.3\textwidth]{weak_connection}
 \end{document}
 
 vim:set et sw=4 ts=4 tw=0:
