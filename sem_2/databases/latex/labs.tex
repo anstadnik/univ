@@ -138,7 +138,7 @@ SELECT * FROM R r1, R r2 WHERE r1.A=r2.A AND r1.B <> r2.B
 
 This query will output an empty set if functional dependency holds
 \subsection{}
-SELECT * FROM R r1, R r2 WHERE (r1.A=r2.A OR r1.B=r2.B) AND (r1.C <> r2.B OR
+SELECT * FROM R r1, R r2 WHERE (r1.A=r2.A AND r1.B=r2.B) AND (r1.E <> r2.E OR
 r1.D <> r1.D)
 
 This query will output an empty set if functional dependency holds
