@@ -13,6 +13,6 @@ class Output:
         p1 = subprocess.Popen(["echo", self.text], stdout=subprocess.PIPE)
         p2 = subprocess.Popen(["lolcat-c"], stdin=p1.stdout, stdout=subprocess.PIPE)
         p1.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
-        output, err = p2.communicate()
+        output, _ = p2.communicate()
         # print(str(output).decode('utf-8'))
         sys.stdout.buffer.write(output)

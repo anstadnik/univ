@@ -22,13 +22,25 @@ def main():
     # Get the input image
     img = get_img.get_img()
 
-    # Initialize the processor
-    processor = Processor(img)
+    # We have to change the way the constructor is called
+    processor = Processor()
+    processor.init(img)
 
     # Process the image and get the resulting text
     text = processor.process()
 
     # Initialize the output
+    output = Output(text)
+
+    # Output the resulting text
+    output.output()
+
+    # Initialize the processor again
+    processor = Processor(img)
+
+    # This time don't process the image
+
+    # Initialize the output with the new object's field
     output = Output(text)
 
     # Output the resulting text
