@@ -35,13 +35,10 @@ def main():
     # Output the resulting text
     output.output()
 
-    # Initialize the processor again
-    processor = Processor(img)
-
     # This time don't process the image
 
     # Initialize the output with the new object's field
-    output = Output(text)
+    output = Output(Processor().text)
 
     # Output the resulting text
     output.output()

@@ -16,5 +16,5 @@ class Processor(Singleton):
     def process(self):
         # Process the image
         # Return text
-        text = pytesseract.image_to_string(self.img)
-        return text
+        self.text = pytesseract.image_to_string(self.img)
+        return self.text
