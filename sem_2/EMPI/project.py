@@ -85,7 +85,14 @@ class Project:
         self.metrics['NOM'] = {name[1]:[s.strip().split('//')[0] for s in content
                                         if (not s.strip().startswith(('//', '*')) and
                                             re.match('.* {.*', s.strip().split('//')[0]) and
-                                            not re.match('.*class.*', s.split('//')[0]))]
+                                            not re.match('.*class.*', s.split('//')[0]) and
+                                            not re.match('.*try.*', s.split('//')[0]) and
+                                            not re.match('.*switch.*', s.split('//')[0]) and
+                                            not re.match('.*if.*', s.split('//')[0]) and
+                                            not re.match('.*else.*', s.split('//')[0]) and
+                                            not re.match('.*while.*', s.split('//')[0]) and
+                                            not re.match('.*for.*', s.split('//')[0]) and
+                                            not re.match('.*catch.*', s.split('//')[0]))]
                                for name, content in zip(self.files_p, self.files)}
         self.metrics['total']['NOM'] = sum(map(len, self.metrics['NOM'].values()))
 
@@ -97,34 +104,58 @@ class Project:
         self.metrics['total']['WMC'] = sum(self.metrics['WMC'].values())
 
     def calc_TCC(self):
+        self.metrics['TCC'] = {}
+        self.classes = {}
         for f, cont in zip(self.files_p, self.files):
             f = f[1]
-            classes = {cl: {} for cl in self.metrics['NOC'][f]}
-            rez = 0
-            for cl, cl_meths in classes.items():
+            self.classes[f] = {cl: {} for cl in self.metrics['NOC'][f]}
+            n_meths = 0
+            con_cl = 0
+            for cl, cl_meths in self.classes[f].items():
                 for meth in self.metrics['NOM'][f]:
                     indent = None
                     for line in cont:
                         if indent:
-                            if len(line) - len(line.lstrip()) <= indent:
+                            if len(line) - len(line.lstrip()) <= indent and len(line.lstrip()):
                                 break
-                            cl_meths[f] |= set(re.findall('self.\w\+', line))
+                            cl_meths[meth] |= set(re.findall('this.\w+', line))
                         if meth in line:
                             indent = len(line) - len(line.lstrip())
-                            cl_meths[f] = set()
-                    else:
-                        continue
-                    break
-                con_cl = 0
-                print(cl)
-                for perm in permutations(cl_meths, 2):
-                    if perm[0][1] & perm[1][1]:
-                        con_cl += 1
-                rez = (rez + (con_cl / (len(cl[1]) * (len(cl[1]) - 1)))) / 2
-            self.metrics['TCC'][f] = rez
+                            cl_meths[meth] = set()
+                n_meths += len(cl_meths)
+                if len(cl_meths.values()) > 1:
+                    for perm in permutations(cl_meths.values(), 2):
+                        if perm[0] & perm[1]:
+                            con_cl += 1
+            n_meths *= n_meths - 1
+            self.metrics['TCC'][f] = con_cl / n_meths if n_meths else 0
+        self.metrics['total']['TCC'] = sum(self.metrics['TCC'].values()) / len(self.metrics['TCC'].values())
 
     def calc_PNAS(self):
-        pass
+        self.metrics['PNAS'] = {}
+        all_meth = 0
+        overr_meth = 0
+        for f, clss in self.classes.items():
+            s = []
+            for cl, meths in clss.items():  # For every class
+                tokens = cl.split()
+                base_meths = set()
+                for i, word in enumerate(tokens):
+                    if word in {'implements', 'extends'}:
+                        if i + 1 >= len(tokens):
+                            continue
+                        base = tokens[i + 1]
+                        for f, clss in self.classes.items():
+                            if base in clss.keys():
+                                base_meths |= clss.values()
+                                break
+                if len(meths):
+                    s.append(len(set(meths.keys()) - base_meths) / len(set(meths.keys())))
+            self.metrics['PNAS'][f] = sum(s) / len(s) if len(s) else 0
+        self.metrics['total']['PNAS'] = sum(self.metrics['PNAS'].values()) / len(self.metrics['PNAS'].values())
+                    
+
+        
 
     def make_plots(self):
         layout = go.Layout(showlegend=False)
@@ -149,3 +180,17 @@ class Project:
                                     values=list(map(len, self.metrics['NOM'].values())),
                                     textinfo='none')],
                        layout=layout), auto_open=False, filename='NOM.html')
+        plot(go.Figure(data=[go.Pie(labels=list(self.metrics['WMC'].keys()), 
+                                    values=list(self.metrics['WMC'].values()),
+                                    textinfo='none')],
+                       layout=layout), auto_open=False, filename='WMC.html')
+        TCC = {item[0]:item[1] for item in self.metrics['TCC'].items() if item[1] != 0}
+        plot(go.Figure(data=[go.Pie(labels=list(TCC.keys()), 
+                                    values=list(TCC.values()),
+                                    textinfo='none')],
+                       layout=layout), auto_open=False, filename='TCC.html')
+        PNAS = {item[0]:item[1] for item in self.metrics['PNAS'].items() if item[1] != 0}
+        plot(go.Figure(data=[go.Pie(labels=list(PNAS.keys()), 
+                                    values=list(PNAS.values()),
+                                    textinfo='none')],
+                       layout=layout), auto_open=False, filename='PNAS.html')
