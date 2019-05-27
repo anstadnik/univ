@@ -17,6 +17,9 @@ class MyWidget(QtWidgets.QDialog):
         #################
         #  Add widgets  #
         #################
+
+        self.path = QtWidgets.QLabel('Project')
+        self.path.setEnabled(False)
         
         self.text = QtWidgets.QTextEdit("Potato")
         self.text.setEnabled(False)
@@ -46,6 +49,7 @@ class MyWidget(QtWidgets.QDialog):
 
         self.buttons = QtWidgets.QVBoxLayout()
         self.buttons.addStretch()
+        self.buttons.addWidget(self.path)
         self.buttons.addWidget(self.text)
         self.buttons.addWidget(self.desc)
         self.buttons.addWidget(self.total)
@@ -82,10 +86,13 @@ class MyWidget(QtWidgets.QDialog):
             self.web.setEnabled(False)
             self.text.setEnabled(False)
             self.list_metric.setEnabled(False)
+            self.path.setEnabled(False)
             self.total.setEnabled(False)
             self.list_metric.clear()
+        self.path.setText(path.split('/')[-1])
         self.project.compute_metrics()
         self.list_metric.setEnabled(True)
+        self.path.setEnabled(True)
         self.web.setEnabled = True
         self.total.setEnabled(True)
         self.text.setEnabled(True)
