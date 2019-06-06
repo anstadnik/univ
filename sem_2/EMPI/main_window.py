@@ -65,7 +65,8 @@ class MyWidget(QtWidgets.QDialog):
     def change_metrics(self):
         if not self.list_metric.currentText():
             return
-        self.web.load(QtCore.QUrl.fromLocalFile('/home/amyznikov/astadnik/univ/univ_oop/sem_2/EMPI/{}.html'.format(self.list_metric.currentText())))
+        path = '/home/amyznikov/projects/univ'
+        self.web.load(QtCore.QUrl.fromLocalFile('/home/astadnik/projects/univ/my_works/sem_2/EMPI/{}.html'.format(self.list_metric.currentText())))
         self.desc.setText(desc.metrics[self.list_metric.currentText()])
         self.total.setText('Total: {}'.format(self.project.metrics['total'][self.list_metric.currentText()]))
         self.text.setText('\n'.join(['{}: {}'.format(name, loc)
@@ -74,8 +75,8 @@ class MyWidget(QtWidgets.QDialog):
 
     def open_proj(self):
         path = QtWidgets.QFileDialog.getExistingDirectory(self, "Find Files",
-                "/home/amyznikov/astadnik/univ/Simple-Java-Text-Editor/")
-                # QtCore.QDir.currentPath())
+                # "/home/amyznikov/astadnik/univ/Simple-Java-Text-Editor/")
+                QtCore.QDir.currentPath())
         # path = "/home/amyznikov/astadnik/univ/Simple-Java-Text-Editor/"
         # path = "/home/amyznikov/astadnik/univ/Simple-Java-Text-Editor"
         try:
