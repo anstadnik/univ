@@ -294,6 +294,17 @@ On this image we can clearly see all connections. There are a couple types of co
 Also there are a couple of weak entities (an entity is called weak if it's primary
 key is a superset of the primary key of the related entity):
 \includegraphics[width=0.3\textwidth]{weak_connection}
+\section{Lab 8}
+\subsection{}
+CREATE TABLE Department(\\
+\indent id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,\\
+\indent dept\_name VARCHAR UNIQUE,\\
+\indent employees\_number INT CHECK (employees\_number > 0),\\
+\indent street VARCHAR,\\
+\indent building\_num INT,\\
+\indent room\_num INT,\\
+\indent dept\_location as street + building\_num + room\_num,\\
+)
 \end{document}
 
 vim:set et sw=4 ts=4 tw=0:
