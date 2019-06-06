@@ -56,8 +56,8 @@ def Jacobi_solve(matrix):
     B = np.array([6., 25., -11., 15.])
     X = np.random.rand(*B.shape)
     eps = 10 ** -7
-    D = A * np.eye(*A.shape)
-    R = A - D
+    D = A * np.eye(*A.shape)  # Diagonal
+    R = A - D  # Remainder
     while 42:
         X_prev = X
         X = np.linalg.inv(D) @ (B - R @ X)

@@ -25,9 +25,9 @@ def disp(points, triangles=None):
 
 def area_of_triangle(p1, p2, p3):
     s = (1/2) * abs(np.linalg.det([[p1[0]-p3[0], p1[1]-p3[1]],
-            [p2[0]-p3[0], p2[1]-p3[1]]]))
+                                   [p2[0]-p3[0], p2[1]-p3[1]]]))
     return s
-    
+
 
 def main():
     points = parse()
